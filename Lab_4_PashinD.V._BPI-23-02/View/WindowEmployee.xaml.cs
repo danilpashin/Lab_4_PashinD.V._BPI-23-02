@@ -42,7 +42,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
                 persons.Add(new PersonDPO
                 {
                     Id = p.Id,
-                    Role = rol.NameRole,
+                    RoleName = rol.NameRole,
                     FirstName = p.FirstName,
                     LastName = p.LastName,
                     Birthday = p.Birthday

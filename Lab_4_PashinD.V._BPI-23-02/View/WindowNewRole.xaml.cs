@@ -19,9 +19,37 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
     /// </summary>
     public partial class WindowNewRole : Window
     {
+        private int id;
+        private string nameRole;
+
+        public int Id { 
+            get => id; 
+            set 
+            {
+                id = value;
+            } 
+        }
+
+        public string NameRole
+        {
+            get => nameRole;
+            set
+            {
+                nameRole = value;
+            }
+        }
+
         public WindowNewRole()
         {
             InitializeComponent();
+        }
+
+        private void SaveChange(object sender, RoutedEventArgs e)
+        {
+            Id = Convert.ToInt32(IdRoleTBox.Text);
+            NameRole = RoleTBox.Text;
+            this.DialogResult = true;
+            Close();
         }
     }
 }

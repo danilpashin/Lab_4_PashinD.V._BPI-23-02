@@ -68,7 +68,9 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
         }
         public PersonDPO CopyFromPerson(Person person)
         {
-            PersonDPO perDpo = new PersonDPO(); RoleViewModel vmRole = new RoleViewModel(); string role = string.Empty;
+            PersonDPO perDpo = new PersonDPO(); 
+            RoleViewModel vmRole = new RoleViewModel(); 
+            string role = string.Empty;
             foreach (var r in vmRole.ListRole)
             {
                 if (r.Id == person.RoleId)

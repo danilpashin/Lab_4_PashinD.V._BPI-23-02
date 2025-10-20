@@ -32,7 +32,7 @@ namespace Lab_4_PashinD.V._BPI_23_02
         }
         private void Role_OnClick(object sender, RoutedEventArgs e)
         {
-            WindowRole wRole = new WindowRole(); 
+            WindowRole wRole = new WindowRole();
             wRole.Show();
         }
 

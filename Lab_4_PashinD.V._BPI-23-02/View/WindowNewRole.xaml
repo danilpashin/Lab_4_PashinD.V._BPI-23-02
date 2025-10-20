@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View"
         mc:Ignorable="d"
-        Title="Новая должность" Height="150" Width="230" MinHeight="150" MinWidth="230">
+        Title="Новая должность" Height="200" Width="230" MinHeight="150" MinWidth="230">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -14,14 +14,14 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
             <Label Content="Код:" Width="30"/>
-            <TextBox Grid.Row="0" Width="70" Height="20"/>
+            <TextBox x:Name="IdRoleTBox" Text="{Binding Path=Id}" Grid.Row="0" Width="70" Height="20"/>
         </StackPanel>
         <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5">
             <Label Content="Должность:" Grid.Row="0" Width="75"/>
-            <TextBox Grid.Row="0" Width="120" Height="20"/>
+            <TextBox x:Name="RoleTBox" Text="{Binding Path=NameRole}" Grid.Row="0" Width="120" Height="20"/>
         </StackPanel>
         <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,10,5">
-            <Button Content="Сохранить" Margin="0,5,5,5" Height="20"/>
+            <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Click="SaveChange"/>
             <Button Content="Отменить" Margin="0,5,0,5" Height="20"/>
         </StackPanel>
     </Grid>

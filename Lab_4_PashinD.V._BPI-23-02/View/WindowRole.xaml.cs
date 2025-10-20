@@ -21,11 +21,11 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
     /// </summary>
     public partial class WindowRole : Window
     {
+        RoleViewModel vmRole;
         public WindowRole()
         {
             InitializeComponent();
-            //DataContext = new RoleViewModel();
-            RoleViewModel vmRole = new RoleViewModel();
+            vmRole = new RoleViewModel();
             DataContext = vmRole;
             List<Role> roles = new List<Role>();
             foreach (Role r in vmRole.ListRole)

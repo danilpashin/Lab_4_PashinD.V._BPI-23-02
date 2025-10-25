@@ -32,14 +32,13 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     int maxIdRole = MaxId() + 1;
                     Role role = new Role { Id = maxIdRole }; 
                     wnRole.DataContext = role;
-                    role.NameRole = wnRole.RoleTBox.Text;
 
                     if (wnRole.ShowDialog() == true)
                     {
                         ListRole.Add(role);
+                        SaveChanges();
+                        SelectedRole = role;
                     }
-                    SaveChanges();
-                    SelectedRole = role;
                 }));
             }
         }
@@ -56,7 +55,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     Role tempRole = new Role(); 
                     tempRole = role.ShallowCopy(); 
                     wnRole.DataContext = tempRole;
-                    role.NameRole = wnRole.RoleTBox.Text;
 
                     if (wnRole.ShowDialog() == true)
                     {

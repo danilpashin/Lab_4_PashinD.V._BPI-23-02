@@ -29,6 +29,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
             PersonViewModel vmPerson = new PersonViewModel();
             RoleViewModel vmRole = new RoleViewModel();
             List<Role> roles = new List<Role>();
+            DataContext = vmPerson;
             foreach (Role r in vmRole.ListRole)
             {
                 roles.Add(r);
@@ -49,7 +50,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
                 });
             }
             lvEmployee.ItemsSource = persons;
-
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Lab_4_PashinD.V._BPI_23_02.Model;
 using Lab_4_PashinD.V._BPI_23_02.Helper;
+using Lab_4_PashinD.V._BPI_23_02.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,17 +15,14 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
 {
     public class PersonViewModel : INotifyPropertyChanged
     {
-        private PersonDPO selectedPersonDpo;
-        /// <summary>
-        /// выделенные в списке данные по сотруднику
-        /// </summary>
-        public PersonDPO SelectedPersonDpo
+        private PersonDPO selectedPersonDPO;
+        public PersonDPO SelectedPersonDPO
         {
-            get { return selectedPersonDpo; }
+            get { return selectedPersonDPO; }
             set
             {
-                selectedPersonDpo = value; 
-                OnPropertyChanged(nameof(SelectedPersonDpo));
+                selectedPersonDPO = value; 
+                OnPropertyChanged(nameof(SelectedPersonDPO));
             }
         }
 
@@ -65,14 +63,15 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 LastName = "Сидоров",
                 Birthday = new DateTime(1983, 05, 10)
             });
-            ListPersonDPO = GetListPersonDpo();
+            ListPersonDPO = GetListPersonDPO();
         }
-        public ObservableCollection<PersonDPO> GetListPersonDpo()
+        public ObservableCollection<PersonDPO> GetListPersonDPO()
         {
+            ListPersonDPO = new ObservableCollection<PersonDPO>();
             foreach (var person in ListPerson)
             {
                 PersonDPO p = new PersonDPO(); 
-                p = p.CopyFromPerson(person); 
+                p = p.CopyFromPerson(person);
                 ListPersonDPO.Add(p);
             }
             return ListPersonDPO;
@@ -98,27 +97,30 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return addPerson ??
                 (addPerson = new RelayCommand(obj =>
                 {
-                    WindowNewEmployee wnPerson = new WindowNewEmployee
+                    WindowNewEmployee wnPerson = new WindowNewEmployee("")
                     {
                         Title = "Новый сотрудник"
                     };
-                    // формирование кода нового собрудника
+                    // формирование кода нового сотрудника
                     int maxIdPerson = MaxId() + 1;
                     PersonDPO per = new PersonDPO
                     {
-
-
-                        Id = maxIdPerson, Birthday = DateTime.Now
+                        Id = maxIdPerson, 
+                        Birthday = DateTime.Now
                     };
                     wnPerson.DataContext = per;
                     if (wnPerson.ShowDialog() == true)
                     {
-                        Role r = (Role)wnPerson.CbRole.SelectedValue; 
-                        per.RoleName = r.NameRole; 
+                        Role r = (Role)wnPerson.CbRole.SelectedItem;
+                        per.RoleName = r.NameRole;
+                        per.FirstName = wnPerson.FirstNameTBox.Text;
+                        per.LastName = wnPerson.LastNameTBox.Text;
                         ListPersonDPO.Add(per);
                         Person p = new Person();
-                        p = p.CopyFromPerson(per); 
+                        p = p.CopyFromPersonDPO(per); 
                         ListPerson.Add(p);
+                        SaveChanges();
+                        SelectedPersonDPO = per;
                     }
                 },
                 (obj) => true));
@@ -132,19 +134,18 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return editPerson ??
                 (editPerson = new RelayCommand(obj =>
                 {
-                    WindowNewEmployee wnPerson = new WindowNewEmployee()
+                    WindowNewEmployee wnPerson = new WindowNewEmployee(SelectedPersonDPO.RoleName)
                     {
                         Title = "Редактирование данных сотрудника",
                     };
-                    PersonDPO personDpo = SelectedPersonDpo; 
+                    PersonDPO personDpo = SelectedPersonDPO; 
                     PersonDPO tempPerson = new PersonDPO(); 
                     tempPerson = personDpo.ShallowCopy(); 
                     wnPerson.DataContext = tempPerson;
 
-                    //wnPerson.CbRole.ItemsSource = new ListRole();
                     if (wnPerson.ShowDialog() == true)
                     {
-                        Role r = (Role)wnPerson.CbRole.SelectedValue; 
+                        Role r = (Role)wnPerson.CbRole.SelectedValue;
                         personDpo.RoleName = r.NameRole; 
                         personDpo.FirstName = tempPerson.FirstName; 
                         personDpo.LastName = tempPerson.LastName; 
@@ -156,7 +157,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
                         p = p.CopyFromPersonDPO(personDpo);
                     }
-                }, (obj) => SelectedPersonDpo != null && ListPersonDPO.Count > 0));
+                }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));
             }
         }
 
@@ -168,42 +169,35 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return deletePerson ??
                 (deletePerson = new RelayCommand(obj =>
                 {
-                    PersonDPO person = SelectedPersonDpo;
+                    PersonDPO person = SelectedPersonDPO;
                     MessageBoxResult result = MessageBox.Show("Удалить данные по сотруднику: \n" + person.LastName + " " + person.FirstName,
             "Предупреждение", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.OK)
                     {
-                        ListPersonDPO.Remove(person);
                         Person per = new Person();
                         per = per.CopyFromPersonDPO(person); 
-                        ListPerson.Remove(per);
+                        int idToRemove = -1;
+                        foreach (Person p in ListPerson)
+                        {
+                            if (p.Id == per.Id) idToRemove = p.Id;
+                        }
+                        ListPersonDPO.Remove(ListPersonDPO.FirstOrDefault(p => p.Id == idToRemove));
+                        ListPerson.Remove(ListPerson.FirstOrDefault(p => p.Id == idToRemove));
+                        SaveChanges();
                     }
-                }, (obj) => SelectedPersonDpo != null && ListPersonDPO.Count > 0));
+                }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));
             }
         }
 
-        public PersonDPO CopyFromPerson(Person person)
+        private void SaveChanges()
         {
-            PersonDPO perDpo = new PersonDPO(); 
-            RoleViewModel vmRole = new RoleViewModel(); 
-            string role = string.Empty;
-            foreach (var r in vmRole.ListRole)
+            foreach (Window window in Application.Current.Windows)
             {
-                if (r.Id == person.RoleId)
+                if (window is WindowEmployee)
                 {
-                    role = r.NameRole; 
-                    break;
+                    ((WindowEmployee)window).lvEmployee.ItemsSource = GetListPersonDPO();
                 }
             }
-            if (role != string.Empty)
-            {
-                perDpo.Id = person.Id; 
-                perDpo.RoleName = role; 
-                perDpo.FirstName = person.FirstName; 
-                perDpo.LastName = person.LastName; 
-                perDpo.Birthday = person.Birthday;
-            }
-            return perDpo;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

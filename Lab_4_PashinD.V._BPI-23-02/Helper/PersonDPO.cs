@@ -75,7 +75,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
             {
                 if (r.Id == person.RoleId)
                 {
-                    role = r.NameRole; break;
+                    role = r.NameRole; 
+                    break;
                 }
             }
             if (role != string.Empty)

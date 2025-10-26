@@ -34,5 +34,17 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
             this.DialogResult = false;
             Close();
         }
+
+        private void CheckRoleInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetter(c) && !char.IsControl(c) && !char.IsSeparator(c))
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
     }
 }

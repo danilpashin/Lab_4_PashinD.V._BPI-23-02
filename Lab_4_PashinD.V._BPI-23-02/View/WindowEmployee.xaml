@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View"
         mc:Ignorable="d"
         Title="Сотрудники" Height="300" Width="500">
-    <StackPanel>
+    <StackPanel Background="#FFE5E5E5">
         <StackPanel Orientation="Horizontal" Background="#FFE4E0E0">
             <Button Content="Добавить" Height="25" Margin="10,10,5,10" Command="{Binding AddPerson}"/>
             <Button Margin="10,10,5,10" Content="Редактировать" Height="25" Command="{Binding EditPerson}"/>

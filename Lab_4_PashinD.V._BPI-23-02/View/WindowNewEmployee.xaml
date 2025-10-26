@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View"
         mc:Ignorable="d"
         Title="Добавить сотрудника" Height="300" Width="300">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
@@ -20,13 +21,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="Код:" Width="33" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="0" Grid.Column="1" x:Name="IdRoleTBox" Text="{Binding Path=Id}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70" Height="20"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="IdTBox" Text="{Binding Path=Id}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70" Height="20"/>
         <Label Grid.Row="1" Grid.Column="0" Content="Должность:" Width="74" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CbRole" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="25" />
         <Label Grid.Row="2" Grid.Column="0" Content="Фамилия:" Width="62" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="LastNameTBox" Text="{Binding Path=LastName}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="LastNameTBox" Text="{Binding Path=LastName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="3" Grid.Column="0" Content="Имя:" Width="36" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Width="97" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <DatePicker  Grid.Row="4" Grid.Column="1" x:Name="BirthdayTBox" SelectedDate="{Binding Path=Birthday, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="170" Height="25"/>
 

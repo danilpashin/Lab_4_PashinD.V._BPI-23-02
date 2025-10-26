@@ -11,14 +11,14 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Background="#FFE5E5E5" Orientation="Horizontal" Grid.Row="0">
             <Button x:Name ="AddRole" Content="Добавить" Margin="10,10,5,10" Command="{Binding AddRole}"/>
             <Button x:Name ="EditRole" Content="Редактировать" Margin="10,10,5,10" Command="{Binding EditRole}"/>
             <Button x:Name ="DeleteRole" Content="Удалить" Margin="10,10,5,10" Command="{Binding DeleteRole}"/>
         </StackPanel>
-        <StackPanel Background="#FFD8D8D8" Grid.Row="1">
+        <StackPanel Background="#FFE5E5E5" Grid.Row="1">
             <Label Margin="5" HorizontalAlignment="Center">Список должностей сотрудников</Label>
-            <ListView x:Name="lvRole" Background="#FFD3CDCD" SelectedItem="{Binding SelectedRole}">
+            <ListView x:Name="lvRole" SelectedItem="{Binding SelectedRole}">
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>

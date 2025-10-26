@@ -3,6 +3,7 @@ using Lab_4_PashinD.V._BPI_23_02.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,9 @@ using System.Windows.Shapes;
 
 namespace Lab_4_PashinD.V._BPI_23_02.View
 {
-    public partial class WindowNewEmployee : Window
+    public partial class WindowNewEmployee : Window, IDataErrorInfo
     {
+        private bool res = true;
         private string selectedRole;
         public string SelectedRole { 
             get => selectedRole;
@@ -57,6 +59,44 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
         {
             this.DialogResult = false;
             Close();
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                int num;
+                if (!int.TryParse(IdTBox.Text, out num))
+                {
+                    error = "Некорректный код!";
+                }
+
+                if (error != String.Empty)
+                {
+                    res = false;
+                    error = String.Empty;
+                }
+                else res = true;
+
+                return error;
+            }
+        }
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        private void CheckNameInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetter(c) && !char.IsControl(c) && !char.IsSeparator(c))
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
         }
     }
 }

@@ -18,7 +18,7 @@
         </StackPanel>
         <StackPanel Background="#FFE5E5E5" Grid.Row="1">
             <Label Margin="5" HorizontalAlignment="Center">Список должностей сотрудников</Label>
-            <ListView x:Name="lvRole" SelectedItem="{Binding SelectedRole}">
+            <ListView x:Name="lvRole" ItemsSource="{Binding ListRole}" SelectedItem="{Binding SelectedRole}">
                 <ListView.View>
                     <GridView>
                         <GridView.Columns>

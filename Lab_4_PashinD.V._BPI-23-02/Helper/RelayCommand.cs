@@ -9,7 +9,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
 {
     public class RelayCommand : ICommand
     {
-        private Action<object> execute; private Func<object, bool> canExecute;
+        private Action<object> execute; 
+        private Func<object, bool> canExecute;
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -17,7 +18,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
         }
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
-            this.execute = execute; this.canExecute = canExecute;
+            this.execute = execute; 
+            this.canExecute = canExecute;
         }
         public bool CanExecute(object parameter)
         {

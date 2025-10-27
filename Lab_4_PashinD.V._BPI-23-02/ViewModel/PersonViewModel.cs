@@ -122,8 +122,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         SaveChanges();
                         SelectedPersonDPO = per;
                     }
-                },
-                (obj) => true));
+                }, (obj) => true));
             }
         }
         private RelayCommand editPerson; 
@@ -153,8 +152,9 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         // перенос данных из класса отображения данных в класс Person
                         FindPerson finder = new FindPerson(personDpo.Id);
 
-                        List<Person> listPerson = ListPerson.ToList(); 
+                        List<Person> listPerson = ListPerson.ToList();
                         Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
+                        //Person p = listPerson.Find(o => o.Id == personDpo.Id);
                         p = p.CopyFromPersonDPO(personDpo);
                     }
                 }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));

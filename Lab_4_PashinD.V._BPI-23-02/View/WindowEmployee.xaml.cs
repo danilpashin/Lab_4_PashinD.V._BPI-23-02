@@ -26,30 +26,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
         public WindowEmployee()
         {
             InitializeComponent();
-            PersonViewModel vmPerson = new PersonViewModel();
-            RoleViewModel vmRole = new RoleViewModel();
-            List<Role> roles = new List<Role>();
-            DataContext = vmPerson;
-            foreach (Role r in vmRole.ListRole)
-            {
-                roles.Add(r);
-            }
-            ObservableCollection<PersonDPO> persons = new ObservableCollection<PersonDPO>();
-            FindRole finder;
-            foreach (var p in vmPerson.ListPerson)
-            {
-                finder = new FindRole(p.RoleId);
-                Role rol = roles.Find(new Predicate<Role>(finder.RolePredicate));
-                persons.Add(new PersonDPO
-                {
-                    Id = p.Id,
-                    RoleName = rol.NameRole,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    Birthday = p.Birthday
-                });
-            }
-            lvEmployee.ItemsSource = persons;
+            DataContext = new PersonViewModel();
         }
     }
 }

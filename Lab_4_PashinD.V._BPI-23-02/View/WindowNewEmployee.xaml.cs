@@ -55,12 +55,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
             Close();
         }
 
-        private void NoSave(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            Close();
-        }
-
         public string this[string columnName]
         {
             get

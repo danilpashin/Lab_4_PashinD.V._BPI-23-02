@@ -29,11 +29,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
             this.DialogResult = true;
             Close();
         }
-        private void NoSave(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            Close();
-        }
 
         private void CheckRoleInput(object sender, TextCompositionEventArgs e)
         {

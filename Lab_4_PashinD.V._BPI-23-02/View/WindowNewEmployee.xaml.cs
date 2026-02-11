@@ -44,7 +44,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
             int index = 0;
             foreach (Role r in vmRole.ListRole)
             {
-                if (selectedRole == r.NameRole) { index = r.Id-1; }
+                if (selectedRole == r.NameRole) { index = r.Id; }
             }
             CbRole.SelectedIndex = index;
         }
@@ -92,5 +92,18 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
                 }
             }
         }
+
+        private void tbBirthday_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (tbBirthday.Visibility == Visibility.Hidden)
+            {
+                ClBirthday.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ClBirthday.Visibility = Visibility.Hidden;
+            }
+        }
+
     }
 }

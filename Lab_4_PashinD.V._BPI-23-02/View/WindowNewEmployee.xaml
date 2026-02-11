@@ -29,7 +29,9 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Имя:" Width="36" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Width="97" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <DatePicker  Grid.Row="4" Grid.Column="1" x:Name="BirthdayTBox" SelectedDate="{Binding Path=Birthday, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="170" Height="25"/>
+        <TextBox x:Name="tbBirthday" Style="{StaticResource TextBoxDate}" Text="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}" Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" IsVisibleChanged="tbBirthday_IsVisibleChanged" />
+        <DatePicker x:Name="ClBirthday" Visibility="Hidden" Grid.Row="4" Grid.Column="1" SelectedDate="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" />
+
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,5"  >
             <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Click="SaveChange"/>

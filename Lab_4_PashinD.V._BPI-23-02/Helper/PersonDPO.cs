@@ -84,11 +84,17 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
                 perDpo.Id = person.Id; 
                 perDpo.RoleName = role; 
                 perDpo.FirstName = person.FirstName; 
-                perDpo.LastName = person.LastName; 
-                perDpo.Birthday = person.Birthday;
+                perDpo.LastName = person.LastName;
+                perDpo.Birthday = Convert.ToDateTime(person.Birthday);
             }
             return perDpo;
         }
+
+        static public string GetStringBirthday(DateTime birthday)
+        {
+            return Convert.ToString(birthday);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged; 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

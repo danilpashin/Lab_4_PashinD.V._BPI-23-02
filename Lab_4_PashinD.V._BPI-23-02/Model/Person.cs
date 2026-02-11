@@ -16,9 +16,9 @@ namespace Lab_4_PashinD.V._BPI_23_02.Model
         public int RoleId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime Birthday { get; set; }
+        public string Birthday { get; set; }
         public Person() { }
-        public Person(int id, int roleId, string firstName, string lastName, DateTime birthday)
+        public Person(int id, int roleId, string firstName, string lastName, string birthday)
         {
             this.Id = id; 
             this.RoleId = roleId;
@@ -46,7 +46,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.Model
                 per.RoleId = roleId;
                 per.FirstName = personDPO.FirstName;
                 per.LastName = personDPO.LastName;
-                per.Birthday = personDPO.Birthday;
+                per.Birthday = Convert.ToString(personDPO.Birthday);
             }
             return per;
         }

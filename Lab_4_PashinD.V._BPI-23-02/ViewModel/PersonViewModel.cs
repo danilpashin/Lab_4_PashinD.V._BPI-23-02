@@ -1,20 +1,27 @@
-﻿using Lab_4_PashinD.V._BPI_23_02.Model;
-using Lab_4_PashinD.V._BPI_23_02.Helper;
+﻿using Lab_4_PashinD.V._BPI_23_02.Helper;
+using Lab_4_PashinD.V._BPI_23_02.Model;
 using Lab_4_PashinD.V._BPI_23_02.View;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Windows;
-using System.Runtime.CompilerServices;
 
 namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
 {
     public class PersonViewModel : INotifyPropertyChanged
     {
+        string path = String.Empty;
+        string _jsonPersons = String.Empty;
+        public string Error { get; set; }
+        public string Message { get; set; }
         private PersonDPO selectedPersonDPO;
         public PersonDPO SelectedPersonDPO
         {
@@ -31,40 +38,24 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
 
         public PersonViewModel()
         {
-            this.ListPerson.Add(new Person
-            {
-                Id = 1,
-                RoleId = 1,
-                FirstName = "Иван",
-                LastName = "Иванов",
-                Birthday = new DateTime(1980, 02, 28)
-            });
-            this.ListPerson.Add(new Person
-            {
-                Id = 2,
-                RoleId = 2,
-                FirstName = "Петр",
-                LastName = "Петров",
-                Birthday = new DateTime(1981, 03, 20)
-            });
-            this.ListPerson.Add(new Person
-            {
-                Id = 3,
-                RoleId = 3,
-                FirstName = "Виктор",
-                LastName = "Викторов",
-                Birthday = new DateTime(1982, 04, 15)
-            });
-            this.ListPerson.Add(new Person
-            {
-                Id = 4,
-                RoleId = 3,
-                FirstName = "Сидор",
-                LastName = "Сидоров",
-                Birthday = new DateTime(1983, 05, 10)
-            });
+            path = SetPathJson();
+            ListPerson = LoadPerson();
             ListPersonDPO = GetListPersonDPO();
         }
+        public ObservableCollection<Person> LoadPerson()
+        {
+            _jsonPersons = File.ReadAllText(path); 
+            if (_jsonPersons != null)
+            {
+                ListPerson = JsonConvert.DeserializeObject<ObservableCollection<Person>>(_jsonPersons);
+                return ListPerson;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public ObservableCollection<PersonDPO> GetListPersonDPO()
         {
             ListPersonDPO = new ObservableCollection<PersonDPO>();
@@ -111,17 +102,29 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     wnPerson.DataContext = per;
                     if (wnPerson.ShowDialog() == true)
                     {
-                        Role r = (Role)wnPerson.CbRole.SelectedItem;
-                        per.RoleName = r.NameRole;
-                        per.FirstName = wnPerson.FirstNameTBox.Text;
-                        per.LastName = wnPerson.LastNameTBox.Text;
-                        ListPersonDPO.Add(per);
-                        Person p = new Person();
-                        p = p.CopyFromPersonDPO(per); 
-                        ListPerson.Add(p);
-                        SaveChanges();
-                        SelectedPersonDPO = per;
+                        Role r = (Role)wnPerson.CbRole.SelectedValue;
+                        if (r != null)
+                        {
+                            per.RoleName = r.NameRole;
+                            per.FirstName = wnPerson.FirstNameTBox.Text;
+                            per.LastName = wnPerson.LastNameTBox.Text;
+                            per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday));
+                            ListPersonDPO.Add(per);
+                            Person p = new Person();
+                            p = p.CopyFromPersonDPO(per); 
+                            ListPerson.Add(p);
+                            try
+                            {
+                                SaveChanges(ListPerson);
+                            }
+                            catch (Exception e)
+                            {
+                                Error = "Ошибка добавления данных в json файл\n" +
+                                e.Message;
+                            }
+                        }
                     }
+
                 }, (obj) => true));
             }
         }
@@ -138,25 +141,42 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         Title = "Редактирование данных сотрудника",
                     };
                     PersonDPO personDpo = SelectedPersonDPO; 
-                    PersonDPO tempPerson = new PersonDPO(); 
-                    tempPerson = personDpo.ShallowCopy(); 
+                    PersonDPO tempPerson = personDpo.ShallowCopy(); 
                     wnPerson.DataContext = tempPerson;
-
-                    if (wnPerson.ShowDialog() == true)
-                    {
+                    if(wnPerson.ShowDialog() == true) {
                         Role r = (Role)wnPerson.CbRole.SelectedValue;
-                        personDpo.RoleName = r.NameRole; 
-                        personDpo.FirstName = tempPerson.FirstName; 
-                        personDpo.LastName = tempPerson.LastName; 
-                        personDpo.Birthday = tempPerson.Birthday;
-                        // перенос данных из класса отображения данных в класс Person
-                        FindPerson finder = new FindPerson(personDpo.Id);
+                        
+                        if (r != null)
+                        {
+                            
+                            personDpo.RoleName = r.NameRole; 
+                            personDpo.FirstName = tempPerson.FirstName; 
+                            personDpo.LastName = tempPerson.LastName; 
+                            personDpo.Birthday = tempPerson.Birthday;
+                            // перенос данных из класса отображения данных в класс Person
+                            FindPerson finder = new FindPerson(personDpo.Id);
 
-                        List<Person> listPerson = ListPerson.ToList();
-                        Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
-                        //Person p = listPerson.Find(o => o.Id == personDpo.Id);
-                        p = p.CopyFromPersonDPO(personDpo);
-                    }
+                            List<Person> listPerson = ListPerson.ToList();
+                            Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
+                            p = p.CopyFromPersonDPO(personDpo);
+                            ListPerson[p.Id - 1] = p;
+                            //Console.WriteLine(ListPerson);
+                            try
+                            {
+                                Console.WriteLine(ListPerson[3].LastName);
+                                SaveChanges(ListPerson);
+                            }
+                            catch (Exception e)
+                            {
+                                Error = "Ошибка редактирования данных в json файл\n"
+                                + e.Message;
+                            }
+                        }
+                        else
+                        {
+                            Message = "Необходимо выбрать должность сотрудника.";
+                        }
+                }
                 }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));
             }
         }
@@ -183,21 +203,37 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         }
                         ListPersonDPO.Remove(ListPersonDPO.FirstOrDefault(p => p.Id == idToRemove));
                         ListPerson.Remove(ListPerson.FirstOrDefault(p => p.Id == idToRemove));
-                        SaveChanges();
+                        SaveChanges(ListPerson);
                     }
                 }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));
             }
         }
 
-        private void SaveChanges()
+        private void SaveChanges(ObservableCollection<Person> listPersons)
         {
-            foreach (Window window in Application.Current.Windows)
+            var jsonPerson = JsonConvert.SerializeObject(listPersons); 
+            try
             {
-                if (window is WindowEmployee)
+                using (StreamWriter writer = File.CreateText(path))
                 {
-                    ((WindowEmployee)window).lvEmployee.ItemsSource = GetListPersonDPO();
+                    writer.Write(jsonPerson);
                 }
             }
+            catch (IOException e)
+            {
+                Error = "Ошибка записи json файла /n" + e.Message;
+            }
+        }
+
+
+        private string SetPathJson()
+        {
+            string path = Directory.GetCurrentDirectory();
+            path = Convert.ToString(System.IO.Directory.GetParent(path));
+            path = Convert.ToString(System.IO.Directory.GetParent(path));
+            string relPath = @"DataModels\PersonData.json";
+            string resPath = Path.Combine(path, relPath);
+            return resPath;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

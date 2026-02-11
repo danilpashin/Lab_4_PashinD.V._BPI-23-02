@@ -1,13 +1,14 @@
-﻿using Lab_4_PashinD.V._BPI_23_02.Model;
-using Lab_4_PashinD.V._BPI_23_02.Helper;
+﻿using Lab_4_PashinD.V._BPI_23_02.Helper;
+using Lab_4_PashinD.V._BPI_23_02.Model;
 using Lab_4_PashinD.V._BPI_23_02.View;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +17,9 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
 {
     public class RoleViewModel : INotifyPropertyChanged
     {
+        string path = String.Empty;
+        string _jsonRoles = String.Empty;
+        public string Error { get; set; }
         private RelayCommand addRole; 
         public RelayCommand AddRole
         {
@@ -36,7 +40,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     if (wnRole.ShowDialog() == true)
                     {
                         ListRole.Add(role);
-                        SaveChanges();
+                        SaveChanges(ListRole);
                         SelectedRole = role;
                     }
                 }));
@@ -60,8 +64,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     {
                         // сохранение данных в оперативной памяти
                         role.NameRole = tempRole.NameRole;
+                        SaveChanges(ListRole);
                     }
-                    SaveChanges();
                 }, (obj) => SelectedRole != null && ListRole.Count > 0));
             }
         }
@@ -79,9 +83,24 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     if (result == MessageBoxResult.OK)
                     {
                         ListRole.Remove(role);
+                        SaveChanges(ListRole);
                     }
-                    SaveChanges();
                 }, (obj) => SelectedRole != null && ListRole.Count > 0));
+            }
+        }
+
+        public ObservableCollection<Role> LoadRole()
+        {
+            _jsonRoles = File.ReadAllText(path); 
+            if (_jsonRoles != null)
+            {
+                //Console.WriteLine(_jsonRoles);
+                ListRole = JsonConvert.DeserializeObject<ObservableCollection<Role>>(_jsonRoles);
+                return ListRole;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -100,27 +119,28 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 EditRole.CanExecute(true);
             }
         }
+
+        private void SaveChanges(ObservableCollection<Role> listRole)
+        {
+            var jsonRole = JsonConvert.SerializeObject(listRole); 
+            try
+            {
+                using (StreamWriter writer = File.CreateText(path))
+                {
+                    writer.Write(jsonRole);
+                }
+            }
+            catch (IOException e)
+            {
+                Error = "Ошибка записи json файла /n" + e.Message;
+            }
+        }
+
         public ObservableCollection<Role> ListRole { get; set; } = new ObservableCollection<Role>();
         public RoleViewModel()
         {
-            this.ListRole.Add(
-            new Role
-            {
-                Id = 1,
-                NameRole = "Директор"
-            });
-            this.ListRole.Add(
-            new Role
-            {
-                Id = 2,
-                NameRole = "Бухгалтер"
-            });
-            this.ListRole.Add(
-            new Role
-            {
-                Id = 3,
-                NameRole = "Менеджер"
-            });
+            path = SetPathJson();
+            ListRole = LoadRole();
         }
         public int MaxId()
         {
@@ -136,15 +156,14 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
             return max;
         }
 
-        private void SaveChanges()
+        private string SetPathJson()
         {
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window is WindowRole)
-                {
-                    ((WindowRole)window).lvRole.ItemsSource = ListRole;
-                }
-            }
+            string path = Directory.GetCurrentDirectory();
+            path = Convert.ToString(System.IO.Directory.GetParent(path));
+            path = Convert.ToString(System.IO.Directory.GetParent(path));
+            string relPath = @"DataModels\RoleData.json";
+            string resPath = Path.Combine(path, relPath);
+            return resPath;
         }
 
         public event PropertyChangedEventHandler PropertyChanged; 

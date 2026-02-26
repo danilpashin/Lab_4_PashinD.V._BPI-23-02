@@ -3,9 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View"
+        xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View" 
+        xmlns:viewmodel="clr-namespace:Lab_4_PashinD.V._BPI_23_02.ViewModel"
         mc:Ignorable="d"
         Title="Добавить сотрудника" Height="300" Width="300">
+    <Window.Resources>
+        <viewmodel:RoleViewModel x:Key="RoleViewModel"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,13 +27,13 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Код:" Width="33" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="IdTBox" Text="{Binding Path=Id}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70" Height="20" IsEnabled="False"/>
         <Label Grid.Row="1" Grid.Column="0" Content="Должность:" Width="74" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="CbRole" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="25" />
+        <ComboBox DataContext="{StaticResource RoleViewModel}" Grid.Row="1" Grid.Column="1" x:Name="CbRole" ItemsSource="{Binding ListRole}" DisplayMemberPath="NameRole" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="25" />
         <Label Grid.Row="2" Grid.Column="0" Content="Фамилия:" Width="62" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="LastNameTBox" Text="{Binding Path=LastName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="3" Grid.Column="0" Content="Имя:" Width="36" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Width="97" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox x:Name="tbBirthday" Style="{StaticResource TextBoxDate}" Text="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}" Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" IsVisibleChanged="tbBirthday_IsVisibleChanged" />
+        <TextBox x:Name="tbBirthday" Style="{StaticResource TextBoxDate}" Text="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}"  Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" IsVisibleChanged="tbBirthday_IsVisibleChanged"/>
         <DatePicker x:Name="ClBirthday" Visibility="Hidden" Grid.Row="4" Grid.Column="1" SelectedDate="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" />
 
 

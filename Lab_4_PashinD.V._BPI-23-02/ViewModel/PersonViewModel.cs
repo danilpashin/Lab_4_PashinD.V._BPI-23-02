@@ -88,7 +88,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return addPerson ??
                 (addPerson = new RelayCommand(obj =>
                 {
-                    WindowNewEmployee wnPerson = new WindowNewEmployee("")
+                    WindowNewEmployee wnPerson = new WindowNewEmployee()
                     {
                         Title = "Новый сотрудник"
                     };
@@ -97,7 +97,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                     PersonDPO per = new PersonDPO
                     {
                         Id = maxIdPerson, 
-                        Birthday = DateTime.Now
+                        Birthday = DateTime.Today
                     };
                     wnPerson.DataContext = per;
                     if (wnPerson.ShowDialog() == true)
@@ -136,7 +136,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return editPerson ??
                 (editPerson = new RelayCommand(obj =>
                 {
-                    WindowNewEmployee wnPerson = new WindowNewEmployee(SelectedPersonDPO.RoleName)
+                    WindowNewEmployee wnPerson = new WindowNewEmployee()
                     {
                         Title = "Редактирование данных сотрудника",
                     };
@@ -148,22 +148,21 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                         
                         if (r != null)
                         {
-                            
+                            personDpo.Id = tempPerson.Id;
                             personDpo.RoleName = r.NameRole; 
                             personDpo.FirstName = tempPerson.FirstName; 
                             personDpo.LastName = tempPerson.LastName; 
                             personDpo.Birthday = tempPerson.Birthday;
-                            // перенос данных из класса отображения данных в класс Person
+   
                             FindPerson finder = new FindPerson(personDpo.Id);
 
                             List<Person> listPerson = ListPerson.ToList();
                             Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
                             p = p.CopyFromPersonDPO(personDpo);
-                            ListPerson[p.Id - 1] = p;
-                            //Console.WriteLine(ListPerson);
+                            int k = FindIndex(ListPerson, p.Id);
+                            ListPerson[k] = p;
                             try
                             {
-                                Console.WriteLine(ListPerson[3].LastName);
                                 SaveChanges(ListPerson);
                             }
                             catch (Exception e)
@@ -234,6 +233,19 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
             string relPath = @"DataModels\PersonData.json";
             string resPath = Path.Combine(path, relPath);
             return resPath;
+        }
+
+        private int FindIndex(ObservableCollection<Person> listPerson, int id)
+        {
+            int k=-1;
+            foreach (Person p in listPerson){
+                k++;
+                if (p.Id == id)
+                {
+                    return k;
+                }
+            }
+            return 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

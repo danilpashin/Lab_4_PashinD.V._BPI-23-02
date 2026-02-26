@@ -13,6 +13,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
     public class PersonDPO : INotifyPropertyChanged
     {
         public int Id { get; set; }
+        
         private string _roleName;
         public string RoleName
         {
@@ -59,7 +60,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
             this.Id = id; 
             this.RoleName = roleName;
             this.FirstName = firstName; 
-            this.LastName = lastName; 
+            this.LastName = lastName;
             this.Birthday = birthday;
         }
         public PersonDPO ShallowCopy()

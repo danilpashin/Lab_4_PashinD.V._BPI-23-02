@@ -23,7 +23,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.Model
             this.Id = id; 
             this.RoleId = roleId;
             this.FirstName = firstName; 
-            this.LastName = lastName; 
+            this.LastName = lastName;
             this.Birthday = birthday;
         }
 

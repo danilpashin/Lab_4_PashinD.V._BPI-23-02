@@ -19,7 +19,22 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
     {
         string path = String.Empty;
         string _jsonRoles = String.Empty;
+        private Role selectedRole;
+        public Role SelectedRole
+        {
+            get
+            {
+                return selectedRole;
+            }
+            set
+            {
+                selectedRole = value;
+                OnPropertyChanged(nameof(SelectedRole));
+                EditRole.CanExecute(true);
+            }
+        }
         public string Error { get; set; }
+
         private RelayCommand addRole; 
         public RelayCommand AddRole
         {
@@ -104,21 +119,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
             }
         }
 
-
-        private Role selectedRole;
-        public Role SelectedRole
-        {
-            get
-            {
-                return selectedRole;
-            }
-            set
-            {
-                selectedRole = value;
-                OnPropertyChanged(nameof(SelectedRole));
-                EditRole.CanExecute(true);
-            }
-        }
 
         private void SaveChanges(ObservableCollection<Role> listRole)
         {

@@ -11,6 +11,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
     {
         private Action<object> execute; 
         private Func<object, bool> canExecute;
+        private Action onTextBoxGotFocus;
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
@@ -21,6 +23,12 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
             this.execute = execute; 
             this.canExecute = canExecute;
         }
+
+        public RelayCommand(Action onTextBoxGotFocus)
+        {
+            this.onTextBoxGotFocus = onTextBoxGotFocus;
+        }
+
         public bool CanExecute(object parameter)
         {
             return this.canExecute == null || this.canExecute(parameter);

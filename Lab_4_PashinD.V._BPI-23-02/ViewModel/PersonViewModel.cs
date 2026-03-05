@@ -108,7 +108,9 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                             per.RoleName = r.NameRole;
                             per.FirstName = wnPerson.FirstNameTBox.Text;
                             per.LastName = wnPerson.LastNameTBox.Text;
-                            per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday));
+                            Console.WriteLine(Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Day) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Month) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Year)));
+                            //per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday));
+                            per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Day) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Month) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Year));
                             ListPersonDPO.Add(per);
                             Person p = new Person();
                             p = p.CopyFromPersonDPO(per); 

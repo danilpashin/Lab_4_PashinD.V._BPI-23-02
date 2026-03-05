@@ -43,17 +43,5 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
                 }
             }
         }
-
-        private void tbBirthday_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (tbBirthday.Visibility == Visibility.Hidden)
-            {
-                ClBirthday.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ClBirthday.Visibility = Visibility.Hidden;
-            }
-        }
     }
 }

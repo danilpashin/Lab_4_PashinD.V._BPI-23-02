@@ -7,13 +7,16 @@
         <Setter Property="Background" Value="#FFEDEDED" />
     </Style>
 
-    <Style x:Key="TextBoxDate" TargetType="TextBox">
+    <!--<Style x:Key="TextBoxDate" TargetType="TextBox">
     <Style.Triggers>
         <Trigger Property="IsFocused" Value="True">
             <Setter Property="Visibility" Value="Hidden"/>
         </Trigger>
-    </Style.Triggers>
-    </Style>
+            <Trigger Property="IsFocused" Value="False">
+                <Setter Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>-->
 
 
     <SolidColorBrush x:Key="Menu.Static.Background" Color="#FFF0F0F0"/>

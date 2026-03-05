@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab_4_PashinD.V._BPI_23_02.View" 
         xmlns:viewmodel="clr-namespace:Lab_4_PashinD.V._BPI_23_02.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Добавить сотрудника" Height="300" Width="300">
     <Window.Resources>
         <viewmodel:RoleViewModel x:Key="RoleViewModel"/>
+        <viewmodel:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
 
     <Grid>
@@ -33,8 +35,20 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Имя:" Width="36" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Width="97" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox x:Name="tbBirthday" Style="{StaticResource TextBoxDate}" Text="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}}"  Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" IsVisibleChanged="tbBirthday_IsVisibleChanged"/>
-        <DatePicker x:Name="ClBirthday" Visibility="Hidden" Grid.Row="4" Grid.Column="1" SelectedDate="{Binding Birthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130" />
+        <TextBox x:Name="tbBirthday" Visibility="{Binding IsVisible}" DataContext="{StaticResource MainViewModel}" Text="{Binding CurrBirthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}, Mode=OneWay}"  Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="GotFocus">
+                    <i:InvokeCommandAction Command="{Binding DateViewChange}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <DatePicker x:Name="ClBirthday" Visibility="{Binding IsNotVisible}" DataContext="{StaticResource MainViewModel}" Grid.Row="4" SelectedDate="{Binding CurrBirthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedDateChanged">
+                    <i:InvokeCommandAction Command="{Binding DateViewChange}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </DatePicker>
 
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,5"  >

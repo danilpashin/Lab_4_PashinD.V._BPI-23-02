@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace Lab_4_PashinD.V._BPI_23_02.Helper
 {
-    public class PersonDPO : INotifyPropertyChanged
+    public class PersonDPO : INotifyPropertyChanged, IDataErrorInfo
     {
+        private string _error = string.Empty;
         public int Id { get; set; }
         
         private string _roleName;
@@ -44,8 +45,8 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
                 OnPropertyChanged(nameof(LastName));
             }
         }
-        private DateTime birthday;
-        public DateTime Birthday
+        private string birthday;
+        public string Birthday
         {
             get { return birthday; }
             set
@@ -55,7 +56,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
             }
         }
         public PersonDPO() { }
-        public PersonDPO(int id, string roleName, string firstName, string lastName, DateTime birthday)
+        public PersonDPO(int id, string roleName, string firstName, string lastName, string birthday)
         {
             this.Id = id; 
             this.RoleName = roleName;
@@ -86,14 +87,57 @@ namespace Lab_4_PashinD.V._BPI_23_02.Helper
                 perDpo.RoleName = role; 
                 perDpo.FirstName = person.FirstName; 
                 perDpo.LastName = person.LastName;
-                perDpo.Birthday = Convert.ToDateTime(person.Birthday);
+                perDpo.Birthday = person.Birthday;
             }
             return perDpo;
         }
 
-        static public string GetStringBirthday(DateTime birthday)
+        public string Error => _error;
+
+        public string this[string columnName]
         {
-            return Convert.ToString(birthday);
+            get
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(FirstName):
+                        if (string.IsNullOrWhiteSpace(FirstName))
+                            error = "Имя не может быть пустым";
+                        else if (FirstName.Any(char.IsDigit))
+                            error = "Имя не должно содержать цифры";
+                        else if (FirstName.Length < 2)
+                            error = "Имя должно содержать минимум 2 символа";
+                        break;
+
+                    case nameof(LastName):
+                        if (string.IsNullOrWhiteSpace(LastName))
+                            error = "Фамилия не может быть пустой";
+                        else if (LastName.Any(char.IsDigit))
+                            error = "Фамилия не должна содержать цифры";
+                        else if (LastName.Length < 2)
+                            error = "Фамилия должна содержать минимум 2 символа";
+                        break;
+
+                    case nameof(Birthday):
+                        if (Convert.ToDateTime(Birthday) > DateTime.Now)
+                            error = "Дата рождения не может быть в будущем";
+                        else if (Convert.ToDateTime(Birthday) < DateTime.Now.AddYears(-100))
+                            error = "Некорректная дата рождения";
+                        break;
+                }
+
+                return error;
+            }
+        }
+
+        // Метод для проверки всей модели
+        public bool IsValid()
+        {
+            return string.IsNullOrEmpty(this[nameof(FirstName)]) &&
+                   string.IsNullOrEmpty(this[nameof(LastName)]) &&
+                   string.IsNullOrEmpty(this[nameof(Birthday)]);
         }
 
         public event PropertyChangedEventHandler PropertyChanged; 

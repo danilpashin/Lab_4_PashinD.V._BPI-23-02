@@ -43,17 +43,17 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return addRole ??
                 (addRole = new RelayCommand(obj =>
                 {
-                    WindowNewRole wnRole = new WindowNewRole
+                    int maxIdRole = MaxId() + 1;
+                    RoleWindowViewModel viewModel = new RoleWindowViewModel(maxIdRole);
+                    WindowNewRole wnRole = new WindowNewRole()
                     {
                         Title = "Новая должность",
+                        DataContext = viewModel
                     };
-                    // формирование кода новой должности
-                    int maxIdRole = MaxId() + 1;
-                    Role role = new Role { Id = maxIdRole }; 
-                    wnRole.DataContext = role;
 
                     if (wnRole.ShowDialog() == true)
                     {
+                        Role role = viewModel.CurrRole;
                         ListRole.Add(role);
                         SaveChanges(ListRole);
                         SelectedRole = role;
@@ -69,16 +69,19 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return editRole ??
                 (editRole = new RelayCommand(obj =>
                 {
-                    WindowNewRole wnRole = new WindowNewRole { Title = "Редактирование должности", }; 
                     Role role = SelectedRole;
                     Role tempRole = new Role(); 
-                    tempRole = role.ShallowCopy(); 
-                    wnRole.DataContext = tempRole;
+                    tempRole = role.ShallowCopy();
+                    RoleWindowViewModel viewModel = new RoleWindowViewModel(tempRole);
+                    WindowNewRole wnRole = new WindowNewRole()
+                    {
+                        Title = "Редактирование должности",
+                        DataContext = viewModel
+                    };
 
                     if (wnRole.ShowDialog() == true)
                     {
-                        // сохранение данных в оперативной памяти
-                        role.NameRole = tempRole.NameRole;
+                        role.NameRole = viewModel.CurrRole.NameRole;
                         SaveChanges(ListRole);
                     }
                 }, (obj) => SelectedRole != null && ListRole.Count > 0));

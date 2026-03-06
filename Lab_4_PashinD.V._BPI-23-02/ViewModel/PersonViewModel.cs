@@ -42,6 +42,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
             ListPerson = LoadPerson();
             ListPersonDPO = GetListPersonDPO();
         }
+
         public ObservableCollection<Person> LoadPerson()
         {
             _jsonPersons = File.ReadAllText(path); 
@@ -88,32 +89,25 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return addPerson ??
                 (addPerson = new RelayCommand(obj =>
                 {
-                    WindowNewEmployee wnPerson = new WindowNewEmployee()
-                    {
-                        Title = "Новый сотрудник"
-                    };
                     // формирование кода нового сотрудника
                     int maxIdPerson = MaxId() + 1;
-                    PersonDPO per = new PersonDPO
+                    PersonWindowViewModel viewModel = new PersonWindowViewModel(maxIdPerson);
+                    WindowNewEmployee wnPerson = new WindowNewEmployee()
                     {
-                        Id = maxIdPerson, 
-                        Birthday = DateTime.Today
+                        Title = "Новый сотрудник",
+                        DataContext = viewModel,
+                        Owner = Application.Current.MainWindow
                     };
-                    wnPerson.DataContext = per;
                     if (wnPerson.ShowDialog() == true)
                     {
                         Role r = (Role)wnPerson.CbRole.SelectedValue;
                         if (r != null)
                         {
-                            per.RoleName = r.NameRole;
-                            per.FirstName = wnPerson.FirstNameTBox.Text;
-                            per.LastName = wnPerson.LastNameTBox.Text;
-                            Console.WriteLine(Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Day) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Month) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Year)));
-                            //per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday));
-                            per.Birthday = Convert.ToDateTime(Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Day) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Month) + '.' + Convert.ToString(wnPerson.ClBirthday.SelectedDate.Value.Year));
-                            ListPersonDPO.Add(per);
+                            viewModel.CurrPerson.RoleName = r.NameRole;
+
+                            ListPersonDPO.Add(viewModel.CurrPerson);
                             Person p = new Person();
-                            p = p.CopyFromPersonDPO(per); 
+                            p = p.CopyFromPersonDPO(viewModel.CurrPerson); 
                             ListPerson.Add(p);
                             try
                             {
@@ -138,29 +132,26 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 return editPerson ??
                 (editPerson = new RelayCommand(obj =>
                 {
+                    PersonDPO personDpo = SelectedPersonDPO;
+                    PersonWindowViewModel viewModel = new PersonWindowViewModel(personDpo);
                     WindowNewEmployee wnPerson = new WindowNewEmployee()
                     {
                         Title = "Редактирование данных сотрудника",
+                        DataContext = viewModel,
+                        Owner = Application.Current.MainWindow
                     };
-                    PersonDPO personDpo = SelectedPersonDPO; 
-                    PersonDPO tempPerson = personDpo.ShallowCopy(); 
-                    wnPerson.DataContext = tempPerson;
                     if(wnPerson.ShowDialog() == true) {
                         Role r = (Role)wnPerson.CbRole.SelectedValue;
                         
                         if (r != null)
                         {
-                            personDpo.Id = tempPerson.Id;
-                            personDpo.RoleName = r.NameRole; 
-                            personDpo.FirstName = tempPerson.FirstName; 
-                            personDpo.LastName = tempPerson.LastName; 
-                            personDpo.Birthday = tempPerson.Birthday;
-   
+                            viewModel.CurrPerson.RoleName = r.NameRole;
+
                             FindPerson finder = new FindPerson(personDpo.Id);
 
                             List<Person> listPerson = ListPerson.ToList();
                             Person p = listPerson.Find(new Predicate<Person>(finder.PersonPredicate));
-                            p = p.CopyFromPersonDPO(personDpo);
+                            p = p.CopyFromPersonDPO(viewModel.CurrPerson);
                             int k = FindIndex(ListPerson, p.Id);
                             ListPerson[k] = p;
                             try
@@ -209,6 +200,7 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 }, (obj) => SelectedPersonDPO != null && ListPersonDPO.Count > 0));
             }
         }
+        
 
         private void SaveChanges(ObservableCollection<Person> listPersons)
         {
@@ -225,7 +217,6 @@ namespace Lab_4_PashinD.V._BPI_23_02.ViewModel
                 Error = "Ошибка записи json файла /n" + e.Message;
             }
         }
-
 
         private string SetPathJson()
         {

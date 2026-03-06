@@ -10,7 +10,6 @@
         Title="Добавить сотрудника" Height="300" Width="300">
     <Window.Resources>
         <viewmodel:RoleViewModel x:Key="RoleViewModel"/>
-        <viewmodel:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
 
     <Grid>
@@ -27,22 +26,22 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="Код:" Width="33" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="0" Grid.Column="1" x:Name="IdTBox" Text="{Binding Path=Id}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70" Height="20" IsEnabled="False"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="IdTBox" Text="{Binding CurrPerson.Id}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="70" Height="20" IsEnabled="False"/>
         <Label Grid.Row="1" Grid.Column="0" Content="Должность:" Width="74" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <ComboBox DataContext="{StaticResource RoleViewModel}" Grid.Row="1" Grid.Column="1" x:Name="CbRole" ItemsSource="{Binding ListRole}" DisplayMemberPath="NameRole" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="25" />
+        <ComboBox DataContext="{StaticResource RoleViewModel}" Grid.Row="1" Grid.Column="1" x:Name="CbRole" ItemsSource="{Binding ListRole}" SelectedIndex="0" DisplayMemberPath="NameRole" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="25" />
         <Label Grid.Row="2" Grid.Column="0" Content="Фамилия:" Width="62" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="LastNameTBox" Text="{Binding Path=LastName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="LastNameTBox" Text="{Binding CurrPerson.LastName, ValidatesOnDataErrors=True}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="3" Grid.Column="0" Content="Имя:" Width="36" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding Path=FirstName}" PreviewTextInput="CheckNameInput" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="FirstNameTBox" Text="{Binding CurrPerson.FirstName, ValidatesOnDataErrors=True}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="120" Height="20"/>
         <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Width="97" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox x:Name="tbBirthday" Visibility="{Binding IsVisible}" DataContext="{StaticResource MainViewModel}" Text="{Binding CurrBirthday, StringFormat={}{0:dd\.}{0:MM\.}{0:yyyy}, Mode=OneWay}"  Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
+        <TextBox x:Name="tbBirthday" Visibility="{Binding IsVisible}" Text="{Binding CurrBirthday, Mode=OneWay}"  Grid.Row="4" Grid.Column="1" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding DateViewChange}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TextBox>
-        <DatePicker x:Name="ClBirthday" Visibility="{Binding IsNotVisible}" DataContext="{StaticResource MainViewModel}" Grid.Row="4" SelectedDate="{Binding CurrBirthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
+        <DatePicker x:Name="ClBirthday" Visibility="{Binding IsNotVisible}" Grid.Row="4" SelectedDate="{Binding CurrBirthdayDT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="130">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedDateChanged">
                     <i:InvokeCommandAction Command="{Binding DateViewChange}"/>
@@ -52,7 +51,7 @@
 
 
         <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,5"  >
-            <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Click="SaveChange"/>
+            <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Command="{Binding SaveChange}"/>
             <Button Content="Отменить" Margin="0,5,0,5" Height="20" IsCancel="True"/>
         </StackPanel>
     </Grid>

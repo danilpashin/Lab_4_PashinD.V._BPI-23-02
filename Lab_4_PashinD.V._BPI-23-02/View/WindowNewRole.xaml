@@ -17,11 +17,11 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label Content="Код:" Width="34" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-        <TextBox x:Name="IdRoleTBox" Text="{Binding Path=Id}" Width="70" Height="20" HorizontalAlignment="Left" IsEnabled="False" Grid.Row="0" Grid.Column="1"/>
+        <TextBox x:Name="IdRoleTBox" Text="{Binding CurrRole.Id}" Width="70" Height="20" HorizontalAlignment="Left" IsEnabled="False" Grid.Row="0" Grid.Column="1"/>
         <Label Content="Должность:" Width="75" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-        <TextBox x:Name="RoleTBox" Text="{Binding Path=NameRole}" PreviewTextInput="CheckRoleInput" HorizontalAlignment="Left" Width="120" Height="20" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Name="RoleTBox" Text="{Binding CurrRole.NameRole}" HorizontalAlignment="Left" Width="120" Height="20" Grid.Row="1" Grid.Column="1"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Grid.Row="2" Grid.Column="1">
-            <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Click="SaveChange"/>
+            <Button Content="Сохранить" Margin="0,5,5,5" Height="20" Command="{Binding SaveChange}"/>
             <Button Content="Отменить" Margin="0,5,0,5" Height="20" IsCancel="True"/>
         </StackPanel>
     </Grid>

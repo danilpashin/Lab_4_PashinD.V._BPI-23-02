@@ -25,23 +25,5 @@ namespace Lab_4_PashinD.V._BPI_23_02.View
         {
             InitializeComponent();
         }
-
-        private void SaveChange(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = true;
-            Close();
-        }
-
-        private void CheckNameInput(object sender, TextCompositionEventArgs e)
-        {
-            foreach (char c in e.Text)
-            {
-                if (!char.IsLetter(c) && !char.IsControl(c) && !char.IsSeparator(c))
-                {
-                    e.Handled = true;
-                    return;
-                }
-            }
-        }
     }
 }
